@@ -1,0 +1,15 @@
+HTTPS
+https://github.com/ryabchikovand/specialist_final_project_OOP.git
+…or create a new repository on the command line
+echo "# specialist_final_project_OOP" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M master
+git remote add origin https://github.com/ryabchikovand/specialist_final_project_OOP.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/ryabchikovand/specialist_final_project_OOP.git
+git branch -M master
+git push -u origin master
