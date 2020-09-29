@@ -118,9 +118,12 @@ class Task:
         return result
 
     @classmethod
-    def get_active_tasks(cls):
-        pass
+    def get_active_done_tasks(cls, status):
+        conn = sqlite3.connect(cls.__database__)
+        cur = conn.cursor()
 
-    @classmethod
-    def get_done_tasks(cls):
-        pass
+        query_select = f'SELECT data, task FROM {cls.__tablename__} WHERE status=? ORDER BY data'
+        result = list(cur.execute(query_select, (status, )))
+
+        conn.close()
+        return result

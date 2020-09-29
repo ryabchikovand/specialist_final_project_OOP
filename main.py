@@ -2,6 +2,9 @@ import sqlite3
 import argparse
 from model.task import Task
 from user import User
+import pathlib
+import sys
+
 
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('--show_current', action='store_true', help='Show current tasks, you have to do')
@@ -9,7 +12,22 @@ parser.add_argument('--show_done', action='store_true', help='Show done tasks, y
 parser.add_argument('--database', action='store_true', help='Database Path')
 args = parser.parse_args()
 
+
 if __name__ == "__main__":
+    if args.show_current:
+        all_task = Task.get_active_done_tasks(True)
+        for k, v in User.format_all(all_task).items():
+            print(k, ' | '.join(v))
+        sys.exit()
+    if args.show_done:
+        all_task = Task.get_active_done_tasks(False)
+        for k, v in User.format_all(all_task).items():
+            print(k, ' | '.join(v))
+        sys.exit()
+    if args.database:
+        print(str(pathlib.Path().absolute()) + '/' + Task.__database__)
+        sys.exit()
+
     start = input('To start work enter StartApp ')
     while True:
         next_cmd = input("Enter command: ")
@@ -52,9 +70,3 @@ if __name__ == "__main__":
                 print(k, ' | '.join(v))
         else:
             continue
-
-    args = parser.parse_args()
-    print(args.show_current)
-    print(args.show_done)
-    print(args.database)
-
