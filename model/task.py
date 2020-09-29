@@ -43,13 +43,34 @@ class Task:
             conn = sqlite3.connect(cls.__database__)
             cur = conn.cursor()
 
-            query_edit_status = f'UPDATE {cls.__tablename__} SET status=? WHERE data=? AND task=?'
+            query_edit_status = f'UPDATE {cls.__tablename__} SET status=? WHERE data=? AND task=? AND status=True'
             cur.execute(query_edit_status, (False, data, task))
 
             conn.commit()
             conn.close()
         else:
             raise ValueError
+
+    @classmethod
+    def del_date(cls, data: str):
+        """
+        Метод переводит все задачи за указанную дату в стостояние False
+        :param data:
+        :return:
+        """
+        conn = sqlite3.connect(cls.__database__)
+        cur = conn.cursor()
+
+        query_edit_status = f'UPDATE {cls.__tablename__} SET status=? WHERE data=? AND status=True'
+        query_count = f'SELECT COUNT(status) FROM {cls.__tablename__} WHERE data=? AND status=True'
+        result = list(cur.execute(query_count, (data,)))
+        cur.execute(query_edit_status, (False, data))
+
+        conn.commit()
+        conn.close()
+        # Декапсулирую результат из кортежа и списка [(int,)]
+        result = result[0][0]
+        return result
 
     @classmethod
     def check_data_event(cls, data: str, task: str) -> bool:
