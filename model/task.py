@@ -118,7 +118,12 @@ class Task:
         return result
 
     @classmethod
-    def get_active_done_tasks(cls, status):
+    def get_active_done_tasks(cls, status) -> list:
+        """
+        Метод производит поиск по базе активных или выполненных событий
+        :param status:
+        :return:
+        """
         conn = sqlite3.connect(cls.__database__)
         cur = conn.cursor()
 
