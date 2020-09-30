@@ -24,11 +24,17 @@ class TestUser(unittest.TestCase):
         inp = [('1-1-1', 'kek', '1'), ('1-1-1', 'lol', '1'), ('1-1-1', '-_-', '1')]
         out = ['kek', 'lol', '-_-']
         self.assertEqual(User.convert_find(inp), sorted(out))
-        inp = [('131', 'c', '1'), ('12-12-1', 'a', '1'), ('23', 'b', '1')]
+        inp = [('12-12-1', 'c', '1'), ('12-12-1', 'a', '1'), ('12-12-1', 'b', '1')]
         out = ['a', 'b', 'c']
         self.assertEqual(User.convert_find(inp), out)
         inp = [('131', 'c', '1')]
         out = ['c']
+        self.assertEqual(User.convert_find(inp), out)
+        inp = [('date', 'c', '1'), ('date', '0', '1'), ('date', 'a', '1')]
+        out = ['0', 'a', 'c']
+        self.assertEqual(User.convert_find(inp), out)
+        inp = [('date', 'cz', '1'), ('date', 'c', '1'), ('date', '0', '1'), ('date', 'a', '1')]
+        out = ['0', 'a', 'c', 'cz']
         self.assertEqual(User.convert_find(inp), out)
 
     def test_format_all(self):
@@ -43,6 +49,18 @@ class TestUser(unittest.TestCase):
         self.assertEqual(User.format_all(inp), out)
         inp = [('1', 'b'), ('1', 'a'), ('2', 'a'), ('1', 'c'), ('2', '1')]
         out = {'1': ['a', 'b', 'c'], '2': ['1', 'a']}
+        self.assertEqual(User.format_all(inp), out)
+        inp = [('1', 'b'), ('5', 'a'), ('2', 'a'), ('1', 'c'), ('2', '1')]
+        out = {'1': ['b', 'c'], '2': ['1', 'a'], '5': ['a']}
+        self.assertEqual(User.format_all(inp), out)
+        inp = [('1', 'b1234 wdc'), ('5', 'a'), ('2', 'a'), ('1', 'c'), ('2', '1')]
+        out = {'1': ['b1234 wdc', 'c'], '2': ['1', 'a'], '5': ['a']}
+        self.assertEqual(User.format_all(inp), out)
+        inp = [('1', 'b1234 wdc'), ('5', 'a'), ('2', 'a'), ('1', 'c'), ('2', '1'), ('5', '0')]
+        out = {'1': ['b1234 wdc', 'c'], '2': ['1', 'a'], '5': ['0', 'a']}
+        self.assertEqual(User.format_all(inp), out)
+        inp = [('1', 'b')]
+        out = {'1': ['b']}
         self.assertEqual(User.format_all(inp), out)
 
 
